@@ -1775,8 +1775,93 @@ editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not
 run any R code chunks. Instead, the output of the chunk when it was last
 run in the editor is displayed.</p>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxuYGBgIn0= -->
+<pre class="r"><code>library(ggplot2)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="first-part" class="section level1">
+<h1>First Part</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFpbnRpbmc4IDwtIHJlYWQudGFibGUoXCJwYWludGluZzgudHh0XCIsIHNlcCA9IFwiO1wiLCBkZWMgPSBcIjpcIilcbnBhaW50aW5nNjQgPC0gcmVhZC50YWJsZShcInBhaW50aW5nNjQudHh0XCIsIHNlcCA9IFwiO1wiLCBkZWMgPSBcIjpcIilcbnBhaW50aW5nOCRwZWludHJlIDwtIGFzLmZhY3RvcihjKHJlcChcIlJcIiw0MCksIHJlcChcIlZHXCIsNDQpKSlcbnBhaW50aW5nNjQkcGVpbnRyZSA8LSBhcy5mYWN0b3IoYyhyZXAoXCJSXCIsNDApLCByZXAoXCJWR1wiLDQ0KSkpXG5gYGAifQ== -->
+<pre class="r"><code>painting8 &lt;- read.table(&quot;painting8.txt&quot;, sep = &quot;;&quot;, dec = &quot;:&quot;)
+painting64 &lt;- read.table(&quot;painting64.txt&quot;, sep = &quot;;&quot;, dec = &quot;:&quot;)
+painting8$peintre &lt;- as.factor(c(rep(&quot;R&quot;,40), rep(&quot;VG&quot;,44)))
+painting64$peintre &lt;- as.factor(c(rep(&quot;R&quot;,40), rep(&quot;VG&quot;,44)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="question-1" class="section level2">
+<h2>Question 1</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyKHBhaW50aW5nOClcbnZhcihwYWludGluZzY0KVxuYGBgIn0= -->
+<pre class="r"><code>var(painting8)
+var(painting64)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUCA8LSBnZ3Bsb3QoKVxuYGBgIn0= -->
+<pre class="r"><code>P &lt;- ggplot()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gZ2dwbG90KCkgOiBjb3VsZCBub3QgZmluZCBmdW5jdGlvbiBcImdncGxvdFwiXG4ifQ== -->
+<pre><code>Error in ggplot() : could not find function &quot;ggplot&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcyhcIkdHYWxseVwiKVxuYGBgIn0= -->
+<pre class="r"><code>install.packages(&quot;GGally&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV0FSTklORzogUnRvb2xzIGlzIHJlcXVpcmVkIHRvIGJ1aWxkIFIgcGFja2FnZXMgYnV0IGlzIG5vdCBjdXJyZW50bHkgaW5zdGFsbGVkLiBQbGVhc2UgZG93bmxvYWQgYW5kIGluc3RhbGwgdGhlIGFwcHJvcHJpYXRlIHZlcnNpb24gb2YgUnRvb2xzIGJlZm9yZSBwcm9jZWVkaW5nOlxuXG5odHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL3dpbmRvd3MvUnRvb2xzL1xuSW5zdGFsbGF0aW9uIGR1IHBhY2thZ2UgZGFucyDigJhDOi9Vc2Vycy9ncmFicy9BcHBEYXRhL0xvY2FsL1Ivd2luLWxpYnJhcnkvNC4y4oCZXG4oY2FyIOKAmGxpYuKAmSBuJ2VzdCBwYXMgc3DDqWNpZmnDqSlcbnRyeWluZyBVUkwgJ2h0dHBzOi8vY3Jhbi5yc3R1ZGlvLmNvbS9iaW4vd2luZG93cy9jb250cmliLzQuMi9HR2FsbHlfMi4xLjIuemlwJ1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi96aXAnIGxlbmd0aCAxNjM1NjE3IGJ5dGVzICgxLjYgTUIpXG5kb3dubG9hZGVkIDEuNiBNQlxuIn0= -->
+<pre><code>WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KYGBge3J9DQpwbG90KGNhcnMpDQpgYGANCg0KQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgYnkgcHJlc3NpbmcgKkN0cmwrQWx0K0kqLg0KDQpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkN0cmwrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4NCg0KVGhlIHByZXZpZXcgc2hvd3MgeW91IGEgcmVuZGVyZWQgSFRNTCBjb3B5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZWRpdG9yLiBDb25zZXF1ZW50bHksIHVubGlrZSAqS25pdCosICpQcmV2aWV3KiBkb2VzIG5vdCBydW4gYW55IFIgY29kZSBjaHVua3MuIEluc3RlYWQsIHRoZSBvdXRwdXQgb2YgdGhlIGNodW5rIHdoZW4gaXQgd2FzIGxhc3QgcnVuIGluIHRoZSBlZGl0b3IgaXMgZGlzcGxheWVkLg0K</div>
+https://cran.rstudio.com/bin/windows/Rtools/
+Installation du package dans ‘C:/Users/grabs/AppData/Local/R/win-library/4.2’
+(car ‘lib’ n&#39;est pas spécifié)
+trying URL &#39;https://cran.rstudio.com/bin/windows/contrib/4.2/GGally_2.1.2.zip&#39;
+Content type &#39;application/zip&#39; length 1635617 bytes (1.6 MB)
+downloaded 1.6 MB</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoibGUgcGFja2FnZSDigJhHR2FsbHnigJkgYSDDqXTDqSBkw6ljb21wcmVzc8OpIGV0IGxlcyBzb21tZXMgTUQ1IG9udCDDqXTDqSB2w6lyaWZpw6llcyBhdmVjIHN1Y2PDqXNcblxuTGVzIHBhY2thZ2VzIGJpbmFpcmVzIHTDqWzDqWNoYXJnw6lzIHNvbnQgZGFuc1xuXHRDOlxcVXNlcnNcXGdyYWJzXFxBcHBEYXRhXFxMb2NhbFxcVGVtcFxcUnRtcEs4bkZaZVxcZG93bmxvYWRlZF9wYWNrYWdlc1xuIn0= -->
+<pre><code>le package ‘GGally’ a été décompressé et les sommes MD5 ont été vérifiées avec succés
+
+Les packages binaires téléchargés sont dans
+    C:\Users\grabs\AppData\Local\Temp\RtmpK8nFZe\downloaded_packages</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShHR2FsbHkpXG5gYGAifQ== -->
+<pre class="r"><code>library(GGally)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTGUgY2hhcmdlbWVudCBhIG7DqWNlc3NpdMOpIGxlIHBhY2thZ2UgOiBnZ3Bsb3QyXG5SZWdpc3RlcmVkIFMzIG1ldGhvZCBvdmVyd3JpdHRlbiBieSAnR0dhbGx5JzpcbiAgbWV0aG9kIGZyb20gICBcbiAgKy5nZyAgIGdncGxvdDJcbiJ9 -->
+<pre><code>Le chargement a nécessité le package : ggplot2
+Registered S3 method overwritten by &#39;GGally&#39;:
+  method from   
+  +.gg   ggplot2</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwYWlycyhwYWludGluZzgpXG5gYGAifQ== -->
+<pre class="r"><code>ggpairs(painting8)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gc3RvcF9pZl9oaWdoX2NhcmRpbmFsaXR5KGRhdGEsIGNvbHVtbnMsIGNhcmRpbmFsaXR5X3RocmVzaG9sZCkgOiBcbiAgQ29sdW1uICdWMScgaGFzIG1vcmUgbGV2ZWxzICg4NCkgdGhhbiB0aGUgdGhyZXNob2xkICgxNSkgYWxsb3dlZC5cblBsZWFzZSByZW1vdmUgdGhlIGNvbHVtbiBvciBpbmNyZWFzZSB0aGUgJ2NhcmRpbmFsaXR5X3RocmVzaG9sZCcgcGFyYW1ldGVyLiBJbmNyZWFzaW5nIHRoZSBjYXJkaW5hbGl0eV90aHJlc2hvbGQgbWF5IHByb2R1Y2UgbG9uZyBwcm9jZXNzaW5nIHRpbWVzXG4ifQ== -->
+<pre><code>Error in stop_if_high_cardinality(data, columns, cardinality_threshold) : 
+  Column &#39;V1&#39; has more levels (84) than the threshold (15) allowed.
+Please remove the column or increase the &#39;cardinality_threshold&#39; parameter. Increasing the cardinality_threshold may produce long processing times</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KYGBge3J9DQpwbG90KGNhcnMpDQpgYGANCg0KQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgYnkgcHJlc3NpbmcgKkN0cmwrQWx0K0kqLg0KDQpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkN0cmwrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4NCg0KVGhlIHByZXZpZXcgc2hvd3MgeW91IGEgcmVuZGVyZWQgSFRNTCBjb3B5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZWRpdG9yLiBDb25zZXF1ZW50bHksIHVubGlrZSAqS25pdCosICpQcmV2aWV3KiBkb2VzIG5vdCBydW4gYW55IFIgY29kZSBjaHVua3MuIEluc3RlYWQsIHRoZSBvdXRwdXQgb2YgdGhlIGNodW5rIHdoZW4gaXQgd2FzIGxhc3QgcnVuIGluIHRoZSBlZGl0b3IgaXMgZGlzcGxheWVkLg0KDQpgYGB7cn0NCmxpYnJhcnkoZ2dwbG90MikNCmBgYA0KDQojIEZpcnN0IFBhcnQNCiANCmBgYHtyfQ0KcGFpbnRpbmc4IDwtIHJlYWQudGFibGUoInBhaW50aW5nOC50eHQiLCBzZXAgPSAiOyIsIGRlYyA9ICI6IikNCnBhaW50aW5nNjQgPC0gcmVhZC50YWJsZSgicGFpbnRpbmc2NC50eHQiLCBzZXAgPSAiOyIsIGRlYyA9ICI6IikNCnBhaW50aW5nOCRwZWludHJlIDwtIGFzLmZhY3RvcihjKHJlcCgiUiIsNDApLCByZXAoIlZHIiw0NCkpKQ0KcGFpbnRpbmc2NCRwZWludHJlIDwtIGFzLmZhY3RvcihjKHJlcCgiUiIsNDApLCByZXAoIlZHIiw0NCkpKQ0KYGBgDQoNCiMjIFF1ZXN0aW9uIDENCg0KYGBge3J9DQp2YXIocGFpbnRpbmc4KQ0KdmFyKHBhaW50aW5nNjQpDQpgYGANCg0KIyMgUXVlc3Rpb24gMg0KYGBge3J9DQpQIDwtIGdncGxvdCgpDQpnZW9tX2JveHBsb3QoKQ0KDQpgYGANCg0KIyMgUXVlc3Rpb24gMw0KYGBge3J9DQppbnN0YWxsLnBhY2thZ2VzKCJHR2FsbHkiKQ0KbGlicmFyeShHR2FsbHkpDQpnZ3BhaXJzKHBhaW50aW5nOCkNCmBgYA==</div>
 
 
 
