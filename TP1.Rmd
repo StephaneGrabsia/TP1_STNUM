@@ -3,29 +3,18 @@ title: "R Notebook"
 output: html_document
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
 ```{r}
-plot(cars)
-```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
-
-```{r}
+library(GGally)
 library(ggplot2)
+library(FactoMineR)
+library(cluster)
 ```
 
 # First Part
  
 ```{r}
-painting8 <- read.table("painting8.txt", sep = ";", dec = ":")
-painting64 <- read.table("painting64.txt", sep = ";", dec = ":")
+painting8 <- read.table("painting8.txt", sep = ";", dec = ".")
+painting64 <- read.table("painting64.txt", sep = ";", dec = ".")
 painting8$peintre <- as.factor(c(rep("R",40), rep("VG",44)))
 painting64$peintre <- as.factor(c(rep("R",40), rep("VG",44)))
 ```
@@ -33,20 +22,172 @@ painting64$peintre <- as.factor(c(rep("R",40), rep("VG",44)))
 ## Question 1
 
 ```{r}
-var(painting8)
-var(painting64)
+sapply(painting8[c(1:7)], var)
 ```
 
 ## Question 2
 ```{r}
-P <- ggplot()
-geom_boxplot()
-
+boxplot(painting8[c(1:7)])
 ```
 
 ## Question 3
 ```{r}
-install.packages("GGally")
-library(GGally)
-ggpairs(painting8)
+ggpairs(painting8[c(1:7)])
+```
+
+## Question 4
+```{r}
+cor(painting8[c(1:7)])
+```
+
+# Partie 2
+
+## Question 5
+
+```{r}
+painting8_acp <- PCA(painting8, scale.unit = TRUE, ncp = 7, quali.sup = 8, graph = FALSE)
+val_prop <- painting8_acp$eig[,"eigenvalue"]
+val_prop_cum <- cumsum(val_prop)/sum(val_prop)
+cp <- 1:length(val_prop)
+vp <- data.frame(cp=cp,val_prop = val_prop)
+vp_cum <- data.frame(cp=cp,val_prop_cum = val_prop_cum)
+ggplot(data=vp,aes(x=cp,y=val_prop))+
+  geom_bar(stat="identity",fill="steelblue")+
+  theme_minimal()+
+  ggtitle("Eboulis des valeurs propres")+
+  xlab("Nombre de composantes principales")+
+  ylab("Valeurs propres")+
+  scale_x_continuous(breaks=cp)
+
+ggplot(data=vp_cum,aes(x=cp,y=val_prop_cum))+
+  geom_bar(stat="identity",fill="steelblue")+
+  theme_minimal()+
+  ggtitle("Part d'inertie expliquée en fonction du nombre de CP")+
+  xlab("Nombre de composantes principales")+
+  ylab("Part d'inertie expliquée")+
+  scale_x_continuous(breaks=cp)
+
+```
+## Question 6
+```{r}
+print(val_prop_cum[2])
+```
+
+## Question 7
+
+```{r}
+plot.PCA(painting8_acp, shadow=TRUE, cex=0.8, axes=c(1,2),choix="var", new.plot=TRUE, title="Cercle des corrélations")
+```
+
+##Question 8
+
+
+```{r}
+plot.PCA(painting8_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting8, choix="ind",habillage=8,label="none",new.plot=TRUE,
+         title="Projection des individus : en fonction des peintres")
+```
+
+```{r}
+dimdesc(painting8_acp, axes=c(1,2))
+```
+
+
+# Partie 3
+
+##Question 9
+
+```{r}
+painting64_acp <- PCA(painting64, scale.unit = TRUE, ncp = 63, quali.sup = 64, graph = FALSE)
+val_prop <- painting64_acp$eig[,"eigenvalue"]
+val_prop_cum <- cumsum(val_prop)/sum(val_prop)
+cp <- 1:length(val_prop)
+vp <- data.frame(cp=cp,val_prop = val_prop)
+vp_cum <- data.frame(cp=cp,val_prop_cum = val_prop_cum)
+ggplot(data=vp,aes(x=cp,y=val_prop))+
+  geom_bar(stat="identity",fill="steelblue")+
+  theme_minimal()+
+  ggtitle("Eboulis des valeurs propres")+
+  xlab("Nombre de composantes principales")+
+  ylab("Valeurs propres")+
+  scale_x_continuous(breaks=cp)
+
+ggplot(data=vp_cum,aes(x=cp,y=val_prop_cum))+
+  geom_bar(stat="identity",fill="steelblue")+
+  theme_minimal()+
+  ggtitle("Part d'inertie expliquée en fonction du nombre de CP")+
+  xlab("Nombre de composantes principales")+
+  ylab("Part d'inertie expliquée")+
+  scale_x_continuous(breaks=cp)
+
+```
+##Question 10
+```{r}
+print(val_prop_cum[2])
+```
+
+
+## Question 11
+
+```{r}
+plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix="ind",habillage=64,label="none",new.plot=TRUE,
+         title="Projection des individus : en fonction des peintres")
+```
+
+#Partie 3.3
+
+##Question 12
+
+```{r}
+painting64_acp <- PCA(painting64, scale.unit = FALSE, ncp = 63, quali.sup = 64, graph = FALSE)
+plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix="ind",habillage=64,label="none",new.plot=TRUE,
+         title="Projection des individus non normalisés: en fonction des peintres")
+```
+
+#Partie 4
+## Question 13
+```{r}
+cah <- agnes(painting64[c(1:63)],metric="euclidean",method="ward")
+plot(as.dendrogram(cah),main="Ward")
+```
+```{r}
+ei <- data.frame(k=2:dim(painting64)[1],height=sort(cah$height,decreasing=TRUE))
+
+ggplot(data=ei,aes(x=k,y=height))+
+  geom_bar(stat="identity",fill="steelblue")+
+  theme_minimal()+
+  ggtitle("Gain d'inertie inter-classes lors du passage de (k-1) à k classes")+
+  xlab("k")+
+  ylab("Indice d'aggrégation")+
+  scale_x_continuous(breaks=2:dim(painting64)[1])
+```
+
+```{r}
+plot(as.dendrogram(cah),main="Ward")
+rect.hclust(cah,k=3)
+
+classes = cutree(cah, k=3)
+
+cluster_3cl <- data.frame(nom=rownames(painting64),classe=classes)
+cluster_3cl[order(cluster_3cl$classe),]
+
+correspondances = c("black", "blue", "red")
+couleurs = c(1:length(classes))
+for (i in 1:length(classes)){
+  couleurs[i] <- correspondances[classes[i]]
+}
+couleurs
+```
+
+
+```{r}
+plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix="ind", habillage = "none", col.hab = couleurs, palette = c("black", "blue", "yellow"), label="none", new.plot=TRUE,
+         title="Projection des individus non normalisés: en fonction des peintres")
+```
+
+## Question 14
+
+```{r}
+
+cluster_kmeans_2cl = kmeans(painting8[1:7], centers=2, nstart=20)
+print(cluster_kmeans_2cl)
 ```
