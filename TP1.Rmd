@@ -3,7 +3,7 @@ title: "R Notebook"
 output: html_document
 ---
 
-```{r}
+```{r, results=FALSE}
 library(GGally)
 library(ggplot2)
 library(FactoMineR)
@@ -11,7 +11,9 @@ library(cluster)
 ```
 
 # First Part
- 
+
+Le but de ce TP est d'étudier et comparer l'utilisation des couleurs dans des tableaux de deux peintres (Rembrandt et Van Gogh). On dispose ainsi d'un jeu de 84 tableaux pour lesquels on a l'histogramme des différentes couleurs utilisées. On charge tout d'abord les données, et on  rajoute une colonne permetant la distinction entre les tableaux des deux peintres:
+
 ```{r}
 painting8 <- read.table("painting8.txt", sep = ";", dec = ".")
 painting64 <- read.table("painting64.txt", sep = ";", dec = ".")
@@ -24,22 +26,27 @@ painting64$peintre <- as.factor(c(rep("R",40), rep("VG",44)))
 ```{r}
 sapply(painting8[c(1:7)], var)
 ```
+On remarque que la couleur v1 a une variance beaucoup plus grande que les autres couleurs. L'énoncé nous indique que l'espace RGB a été séparé en parties distinctes, donc on peut supposer que la classe v1 correspond à la classe des couleurs ayant un indice RGB proche de (0,0,0), donc des couleurs assez sombres. Cela serait cohérent avec les résultats et les miniatures des tableaux. On peut donc postuler que la grande variance de v1 vient du fait que les couleurs sombres sont plus ou moins présentes en fonction du peintre et du thème de la peinture (tableau lumineux ou pas). Les autres variances sont à peu près du même ordre de grandeur et restent relativement faibles pour des valeurs correspondant à des fréquences.
 
 ## Question 2
 ```{r}
 boxplot(painting8[c(1:7)])
 ```
 
+Ce graphique confirme notre commentaire précédent. On remarque que la moyenne de la couleur v1 est bien supérieure aux autres, ce qui montre que les couleurs de v1 sont les couleurs les plus utilisées, bien que la variance et l'écart inter-quartile soit élevé (ce qui montre que cela dépend énormément du tableau). On remarque de plus qu'il y a de nombreux "outliners" pour les autres couleurs, ce qui traduit la présence de tableau avec des couleurs très marquées (en gardant l'hypothèse pour la définition des classes de couleurs, la couleur v7 représenterait les couleurs blanches, et les valeurs extrêmes pourraient être expliquées par des tableaux lumineux comme le tableau 40 de Van Gogh).
+
+
 ## Question 3
 ```{r}
 ggpairs(painting8[c(1:7)])
 ```
 
+On remarque des nuages de points peu exploitables. On ne repère pas de dépendance linéaire visuellement, et les variables sont très peu corrélées : mis à part pour le couple de variable (v1, v4), les corrélations sont très faibles. On ne peut donc pas conclure sur des relations claires entre les couleurs pour l'instant.
 ## Question 4
 ```{r}
 cor(painting8[c(1:7)])
 ```
-
+On retrouve les résultats précédents, et on ne peut toujours pas conclure sur une corrélation entre les variables. 
 # Partie 2
 
 ## Question 5
@@ -68,10 +75,14 @@ ggplot(data=vp_cum,aes(x=cp,y=val_prop_cum))+
   scale_x_continuous(breaks=cp)
 
 ```
+
+Il est compliqué d'identifier clairement le coude sur l'ébouli de valeur propre, donc il est difficile de déterminer précisemment quels axes analyser avec cette méthode (2? 4?). En utilisant la méthode de Kayser, on retiendrait les 3 premiers axes, cependant cela serait plus compliqué pour la suite de l'analyse. On peut donc décider de garder que le premier plan factoriel, cependant, il faut être conscient que cet axe ne contient pas toutes les informations nécessaires pour analyser le jeu de données. 
+
 ## Question 6
 ```{r}
 print(val_prop_cum[2])
 ```
+Le premier plan factoriel explique 55% de l'inertie totale. Cette valeur est relativement forte, ce qui signifie que ce plan représente convenablement la variabilité du jeu de données. Cependant, une grande partie de cette variabilité restera innexpliqué par cet ACP, donc il faut être prudent, et on pourrait considérer les trois premières composantes si nous le souhaitions. 
 
 ## Question 7
 
@@ -79,7 +90,9 @@ print(val_prop_cum[2])
 plot.PCA(painting8_acp, shadow=TRUE, cex=0.8, axes=c(1,2),choix="var", new.plot=TRUE, title="Cercle des corrélations")
 ```
 
-##Question 8
+La couleur v4 est corrélée positivement avec la première composante principale, alors que la couleur v1 est corrélée négativement avec celle-ci. Ainsi, à droite de l'axe représentant le premier facteur propre nous trouverons les valeurs avec des valeurs de v4 élevées et des valeurs de v1 faible, alors que ce sera l'inverse à gauche. Sous l'hypothèse faite plus haut concernant la signification de la classe v1, les tableaux les plus sombres se trouveront à gauche sur la projection sur le premier plan factoriel. Concernant le deuxième axe, aucune couleur a une assez forte corrélation pour pouvoir lui donner une interprétation. On peut juste dire que les tableaux ayant beaucoup de couleurs v7 se trouveront plutôt en haut alors que ceux ayant plus de couleurs v2 se trouveront en bas. 
+
+## Question 8
 
 
 ```{r}
@@ -91,10 +104,13 @@ plot.PCA(painting8_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting8, choix="i
 dimdesc(painting8_acp, axes=c(1,2))
 ```
 
+On remarque que les oeuvres de Rembrandt et les oeuvres de Van Gogh forment deux groupes relativement distincts. Cela montre que les peintres utilisent des palettes de couleurs assez distinctes dans leurs peintures (on retrouve cette impression en regardant les miniatures fournies en annexe). De plus, les oeuvres de Rembrandt se trouvent vers la gauche du premier plan factoriel alors que celles de Van Gogh se trouvent vers la droite. On en déduit alors que Rembrant a plus tendance à utiliser des couleurs de la classe v1, et donc des couleurs plus sombres selon notre hypothèse, ce qui semble cohérent. Au contraire, les tableaux de Van Gogh sont beaucoup plus colorés, donc avec des couleurs étant dans des classes "centrales" de notre décomposition de l'espace de couleur RGB. On remarque aussi que les tableaux de Rembrandt sont plus resserrés contrairement à ceux de Van Gogh, ce qui peut vouloir dire que les tableaux de Rembrandt ont plus souvent les mêmes teintes que ceux de Van Gogh. 
 
 # Partie 3
 
-##Question 9
+## Question 9
+
+On s'intéresse cette fois-ci à un jeu de données plus détaillé, avec des classes de couleurs plus fines. 
 
 ```{r}
 painting64_acp <- PCA(painting64, scale.unit = TRUE, ncp = 63, quali.sup = 64, graph = FALSE)
@@ -120,11 +136,14 @@ ggplot(data=vp_cum,aes(x=cp,y=val_prop_cum))+
   scale_x_continuous(breaks=cp)
 
 ```
-##Question 10
+
+Comme précédemment, le point d'inflexion est peu visible. On pourrait cependant considérer qu'il se situe au niveau de la troisième valeur propre. Le critère de Kayser nous ferait quant à lui considérer une dizaine de composantes, ce qui ne nous permettrait pas de faire de projections. Cela montre que les relations entre les individus sont assez complexes, d'autant plus que les variables sont nombreuses. 
+
+## Question 10
 ```{r}
 print(val_prop_cum[2])
 ```
-
+Le premier plan factoriel explique moins d'un quart de l'inertie totale, comme on pouvait s'y attendre en regardant l'éboulis des valeurs propres. La projection sur ce plan ne sera donc pas très significative, ou du moins beaucoup moins que sur le jeu de données précédent. Il serait pertinent de considérer un autre facteur principal.
 
 ## Question 11
 
@@ -132,10 +151,11 @@ print(val_prop_cum[2])
 plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix="ind",habillage=64,label="none",new.plot=TRUE,
          title="Projection des individus : en fonction des peintres")
 ```
+On retrouve toujours une séparation entre les oeuvres des deux artistes, cependant les deux "clusters" sont beaucoup plus proches de l'origine de l'axe que précédemment, ce qui complique l'interprétation et rend moins claire la séparation.
 
-#Partie 3.3
+# Partie 3.3
 
-##Question 12
+## Question 12
 
 ```{r}
 painting64_acp <- PCA(painting64, scale.unit = FALSE, ncp = 63, quali.sup = 64, graph = FALSE)
@@ -143,14 +163,17 @@ plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix=
          title="Projection des individus non normalisés: en fonction des peintres")
 ```
 
-#Partie 4
+En effectuant la même annalyse en composante principale, cependant en ne normalisant pas les données, on obtient la projection ci-dessus. Tout d'abord, on observe que le plan factoriel sur lequel est réalisé la projection explique désormais près de 80% de l'inertie totale. On remarque aussi que la séparation est beaucoup plus claire, et que les projections ont une valeur beaucoup plus faible (coordonnées sur les axes). Le fait de réaliser une ACP non normée a ici un sens car toutes les variables représentent une grandeur identique. Le fait de ne pas normer l'ACP donne plus d'importance aux classes de couleur ayant la plus grande fréquence, et au vu de la Question 1, ce sont surement les classes de couleurs faibles, donc des couleurs sombres. Ici, on donne donc plus d'importance à la présence ou non de couleurs sombres, et donc on sépare plus facilement les deux peintres au vu de leurs styles respectifs. 
+
+# Partie 4
+
 ## Question 13
 ```{r}
-cah <- agnes(painting64[c(1:63)],metric="euclidean",method="ward")
+cah <- agnes(painting8[c(1:7)],metric="euclidean",method="ward")
 plot(as.dendrogram(cah),main="Ward")
 ```
 ```{r}
-ei <- data.frame(k=2:dim(painting64)[1],height=sort(cah$height,decreasing=TRUE))
+ei <- data.frame(k=2:dim(painting8)[1],height=sort(cah$height,decreasing=TRUE))
 
 ggplot(data=ei,aes(x=k,y=height))+
   geom_bar(stat="identity",fill="steelblue")+
@@ -158,7 +181,7 @@ ggplot(data=ei,aes(x=k,y=height))+
   ggtitle("Gain d'inertie inter-classes lors du passage de (k-1) à k classes")+
   xlab("k")+
   ylab("Indice d'aggrégation")+
-  scale_x_continuous(breaks=2:dim(painting64)[1])
+  scale_x_continuous(breaks=2:dim(painting8)[1])
 ```
 
 ```{r}
@@ -178,6 +201,9 @@ for (i in 1:length(classes)){
 couleurs
 ```
 
+Il faut utiliser fviz_cluster si on veut pouvoir visualiser facilement. 
+
+
 
 ```{r}
 plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix="ind", habillage = "none", col.hab = couleurs, palette = c("black", "blue", "yellow"), label="none", new.plot=TRUE,
@@ -191,3 +217,8 @@ plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix=
 cluster_kmeans_2cl = kmeans(painting8[1:7], centers=2, nstart=20)
 print(cluster_kmeans_2cl)
 ```
+
+
+# Conclusion
+
+En conclusion, l'analyse statistique de l'histogramme des couleurs sur les tableaux de Rembrandt et de Van Gogh permet de mettre en évidence une différence de style entre les deux peintres. Les outils comme l'ACP et le clustering permettent d'observer des "tendances" chez ces deux peintres, et sont donc utiles au vu du nombre important de variables. Il serait intéressant de représenter visuelement les différentes classes de couleurs afin d'avoir une idée plus claire des données que l'on manipule. Une amélioration posisble de cette analyse serait aussi de considérer des projections en 3D dimensions pour l'ACP. 
