@@ -3,11 +3,12 @@ title: "R Notebook"
 output: html_document
 ---
 
-```{r, results=FALSE}
+```{r, message=FALSE, warning = FALSE}
 library(GGally)
 library(ggplot2)
 library(FactoMineR)
 library(cluster)
+library(factoextra)
 ```
 
 # First Part
@@ -42,11 +43,13 @@ ggpairs(painting8[c(1:7)])
 ```
 
 On remarque des nuages de points peu exploitables. On ne repère pas de dépendance linéaire visuellement, et les variables sont très peu corrélées : mis à part pour le couple de variable (v1, v4), les corrélations sont très faibles. On ne peut donc pas conclure sur des relations claires entre les couleurs pour l'instant.
+
 ## Question 4
 ```{r}
 cor(painting8[c(1:7)])
 ```
 On retrouve les résultats précédents, et on ne peut toujours pas conclure sur une corrélation entre les variables. 
+
 # Partie 2
 
 ## Question 5
@@ -96,8 +99,9 @@ La couleur v4 est corrélée positivement avec la première composante principal
 
 
 ```{r}
-plot.PCA(painting8_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting8, choix="ind",habillage=8,label="none",new.plot=TRUE,
+p <- plot.PCA(painting8_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting8, choix="ind",habillage=8,label="none",new.plot=TRUE,
          title="Projection des individus : en fonction des peintres")
+p + coord_fixed(ratio = 1, xlim =c(-5,5), ylim =c(-5,5), expand = TRUE, clip="on")
 ```
 
 ```{r}
@@ -190,7 +194,7 @@ rect.hclust(cah,k=3)
 
 classes = cutree(cah, k=3)
 
-cluster_3cl <- data.frame(nom=rownames(painting64),classe=classes)
+cluster_3cl <- data.frame(nom=rownames(painting8),classe=classes)
 cluster_3cl[order(cluster_3cl$classe),]
 
 correspondances = c("black", "blue", "red")
@@ -204,10 +208,16 @@ couleurs
 Il faut utiliser fviz_cluster si on veut pouvoir visualiser facilement. 
 
 
-
 ```{r}
-plot.PCA(painting64_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting64, choix="ind", habillage = "none", col.hab = couleurs, palette = c("black", "blue", "yellow"), label="none", new.plot=TRUE,
-         title="Projection des individus non normalisés: en fonction des peintres")
+p <- plot.PCA(painting8_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting8, choix="ind", habillage = 'ind', col.hab = couleurs, palette = c("black", "blue", "yellow"), label="none", new.plot=TRUE,
+         title="Projection des individus et visualisation des clusters obtenus par ACH")
+p + coord_fixed(ratio = 1, xlim =c(-5,5), ylim =c(-5,5), expand = TRUE, clip="on")
+
+```
+```{r}
+p <- plot.PCA(painting8_acp,shadow=TRUE,cex=2,axes=c(1,2), data = painting8, choix="ind",habillage=8,label="none",new.plot=TRUE,
+         title="Projection des individus : en fonction des peintres")
+p + coord_fixed(ratio = 1, xlim =c(-5,5), ylim =c(-5,5), expand = TRUE, clip="on")
 ```
 
 ## Question 14
@@ -218,6 +228,10 @@ cluster_kmeans_2cl = kmeans(painting8[1:7], centers=2, nstart=20)
 print(cluster_kmeans_2cl)
 ```
 
+
+```{r}
+fviz_cluster(cluster_kmeans_2cl, data = painting8[c(1:7)],  stand = TRUE, ellipse = TRUE, ellipse.type = "convex", ggtheme = theme_minimal(), main = "Visualisation des clusters obtenus par k-means")
+```
 
 # Conclusion
 
